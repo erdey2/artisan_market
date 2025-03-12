@@ -9,9 +9,11 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-
 from pathlib import Path
 from datetime import timedelta
+from urllib.parse import urlparse
+
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,8 +28,11 @@ SECRET_KEY = 'django-insecure-@c0&ft1uk3$9$5@=x^!9n)s(1^4pp-s*5amj&!5vesoy#v6jwb
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    'artisan-based-marketing.onrender.com',
+]
 
 # Application definition
 
@@ -49,6 +54,39 @@ INSTALLED_APPS = [
     'dashboard',
 ]
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+    'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+    'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.UserRateThrottle',  # Throttle per user
+        'rest_framework.throttling.AnonRateThrottle',  # Throttle for anonymous users
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'user': '10/minute',  # Allow 100 requests per user per day
+        'anon': '5/minute',  # Allow 10 requests per anonymous user per hour
+    },
+
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+# JWT Settings
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(days=1),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
+    "ROTATE_REFRESH_TOKENS": True,
+}
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Artisan based Marketing API",
+    "DESCRIPTION": "An API for managing users, products, orders, order_products, notifications, and dashboards.",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+}
+
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -60,19 +98,6 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-# REST Framework Config
-REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
-    ),
-}
-
-# JWT Settings
-SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(days=1),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
-    "ROTATE_REFRESH_TOKENS": True,
-}
 
 ROOT_URLCONF = 'project.urls'
 
@@ -97,6 +122,12 @@ WSGI_APPLICATION = 'project.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
+
+DATABASE_URL = "postgresql://neondb_owner:npg_6njoeWwZT7Im@ep-shrill-smoke-a8atnvfr-pooler.eastus2.azure.neon.tech/neondb?sslmode=require"
+parsed_url = urlparse(DATABASE_URL)
+DATABASES = {
+    'default': dj_database_url.config(default=os.getenv('DATABASE_URL')),
+}
 
 DATABASES = {
     'default': {
@@ -155,4 +186,23 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # CORS Settings
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
+]
+
+# customized user
+AUTH_USER_MODEL = 'users.User'
+
+# CORS settings
+
+CORS_ALLOWED_ORIGINS = [
+    "https://artisan-based-marketing.onrender.com",
+    "http://127.0.0.1:8000",
+    "http://localhost:8000",
+]
+
+CORS_ALLOW_CREDENTIALS = True
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://artisan-based-marketing.onrender.com",
+    "http://127.0.0.1:8000",
+    "http://localhost:8000",
 ]
