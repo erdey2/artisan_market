@@ -2,12 +2,12 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 class User(AbstractUser):
-    ARTISAN = 'artisan'
+    ARTIST = 'artist'
     CUSTOMER = 'customer'
     ADMIN = 'admin'
 
     ROLE_CHOICES = [
-        (ARTISAN, 'Artisan'),
+        (ARTIST, 'Artist'),
         (CUSTOMER, 'Customer'),
         (ADMIN, 'Admin'),
     ]

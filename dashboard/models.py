@@ -1,6 +1,5 @@
 from products.models import Product
 from orders.models import Order
-from django.db import models
 from django.db.models import Count, Sum
 from django.contrib.auth import get_user_model
 
