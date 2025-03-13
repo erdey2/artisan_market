@@ -2,9 +2,19 @@ from rest_framework import generics
 from .serializers import ProductSerializer
 from products.models import Product
 
+
 class ProductListView(generics.ListCreateAPIView):
     serializer_class = ProductSerializer
-    queryset = Product.objects.all()
+
+    def get_queryset(self):
+        qs = Product.objects.all()
+        name = self.request.GET.get('name')
+        price = self.request.GET.get('price')
+        if name:
+            qs = qs.filter(name__icontains=name)
+        if price:
+            qs = qs.filter(price__lte=price)
+        return qs
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
