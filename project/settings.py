@@ -14,7 +14,6 @@ from datetime import timedelta
 from urllib.parse import urlparse
 import os
 
-import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -45,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     "rest_framework",
+    "rest_framework.authtoken",
     "rest_framework_simplejwt",
     "corsheaders",
     "channels",  # For WebSockets
@@ -60,7 +60,7 @@ REST_FRAMEWORK = {
     'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
-    'rest_framework.permissions.IsAuthenticated',
+    'rest_framework.permissions.AllowAny',
     ),
     'DEFAULT_THROTTLE_CLASSES': [
         'rest_framework.throttling.UserRateThrottle',  # Throttle per user
@@ -124,22 +124,33 @@ WSGI_APPLICATION = 'project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-DATABASE_URL = "postgresql://artisan_market_owner:npg_oRD8NkqOpH5P@ep-flat-pine-a8xnz3m8-pooler.eastus2.azure.neon.tech/artisan_market?sslmode=require"
+""" DATABASE_URL = "postgresql://artisan_market_owner:npg_oRD8NkqOpH5P@ep-flat-pine-a8xnz3m8-pooler.eastus2.azure.neon.tech/artisan_market?sslmode=require"
 parsed_url = urlparse(DATABASE_URL)
 DATABASES = {
     'default': dj_database_url.config(default=os.getenv('DATABASE_URL')),
-}
+} """
 
 """ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('POSTGRES_DB', 'artist_market_db'),
+        'USER': os.getenv('POSTGRES_USER', 'admin2'),
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'Admin@1234'),
+        'HOST': 'db',  # This should match the service name in docker-compose.yml
+        'PORT': '5432',
+    }
+} """
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'artist_market_db',
-        'USER': 'admin2',
+        'USER':  'admin2',
         'PASSWORD': 'Admin@1234',
         'HOST': 'localhost',
         'PORT': '5432',
     }
-} """
+}
 
 
 # Password validation

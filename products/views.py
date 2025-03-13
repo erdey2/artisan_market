@@ -24,7 +24,7 @@ class ProductListView(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         """Assign the currently logged-in artisan as the product's artist."""
         serializer.save(artist=self.request.user)
-    
+
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
 

@@ -4,16 +4,10 @@ from rest_framework import status
 from .models import DashboardMetrics
 from .serializers import DashboardMetricsSerializer
 from rest_framework.permissions import IsAdminUser
-from drf_spectacular.utils import extend_schema
 
 class DashboardMetricsView(APIView):
     permission_classes = [IsAdminUser] # only admin can access this view
 
-    extend_schema(
-        summary="Retrieve Dashboard Metrics",
-        description="Returns key metrics for the admin dashboard, including total users, active listings, and total revenue.",
-        responses={200: DashboardMetricsSerializer},  # Define the expected response format
-    )
     def get(self, request):
         metrics = {
             'total_users': DashboardMetrics.get_total_users(),
