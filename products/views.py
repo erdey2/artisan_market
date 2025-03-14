@@ -2,6 +2,7 @@ from rest_framework import generics
 from .serializers import ProductSerializer
 from products.models import Product
 from .permissions import IsArtistOrReadOnly # import the new custom permissions class
+from drf_spectacular.utils import extend_schema, OpenApiParameter
 
 class ProductListView(generics.ListCreateAPIView):
     """ Artist can create products; everyone can browse."""
@@ -25,9 +26,25 @@ class ProductListView(generics.ListCreateAPIView):
         """Assign the currently logged-in artisan as the product's artist."""
         serializer.save(artist=self.request.user)
 
+    @extend_schema(
+        summary="List all products",
+        description="Retrieves a list of products. Allows filtering by name and price.",
+        parameters=[
+            OpenApiParameter(name="name", description="Filter by product name", required=False, type=str),
+            OpenApiParameter(name="price", description="Filter by maximum price", required=False, type=float),
+        ],
+        responses={200: ProductSerializer(many=True)}
+
+    )
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
 
+    @extend_schema(
+        summary="Create a new product",
+        description="Allows an authenticated artist to create a new product.",
+        request=ProductSerializer,
+        responses={201: ProductSerializer}
+    )
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
 
