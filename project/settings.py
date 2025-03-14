@@ -37,6 +37,7 @@ ALLOWED_HOSTS = [
 # Application definition
 
 INSTALLED_APPS = [
+    "daphne",  # ASGI server
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -152,7 +153,8 @@ DATABASES = {
     }
 }
 
-ASGI_APPLICATION = 'project.asgi.application'
+# WebSocket configuration
+ASGI_APPLICATION = "project.asgi.application"
 
 # Use Redis for WebSocket channels
 CHANNEL_LAYERS = {

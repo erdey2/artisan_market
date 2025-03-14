@@ -31,7 +31,7 @@ class ProductListView(generics.ListCreateAPIView):
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
 
-class ProductDetail(generics.RetrieveUpdateDestroyAPIView):
+class ProductDetailView(generics.RetrieveUpdateDestroyAPIView):
     """Retrieve, update, or delete a product (only by owner)."""
     queryset = Product.objects.all()
     serializer_class = ProductSerializer

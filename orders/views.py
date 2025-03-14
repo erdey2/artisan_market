@@ -6,7 +6,7 @@ from rest_framework import generics
 from orders.models import Order
 from .serializers import OrderSerializer
 
-# models.py (for update status in the model)
+
 class OrderView(models.Model):
     status = models.CharField(max_length=100)
 
@@ -28,12 +28,11 @@ class OrderListView(generics.ListCreateAPIView):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
 
-class OrderDetail(generics.RetrieveUpdateDestroyAPIView):
+class OrderDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
 
     def update(self, request, *args, **kwargs):
-        # Update logic and notify (if needed)
         order = self.get_object()
         order.update_status(request.data['status'])
         return super().update(request, *args, **kwargs)

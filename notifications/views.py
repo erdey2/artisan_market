@@ -13,7 +13,7 @@ class NotificationListView(generics.ListCreateAPIView):
         return self.create(request, *args, **kwargs)
 
 
-class ProductDetail(generics.RetrieveUpdateDestroyAPIView):
+class NotificationDetailView(generics.RetrieveUpdateDestroyAPIView):
     """Retrieve, update, or delete a product."""
     queryset = Notification.objects.all()
     serializer_class = NotificationSerializer
