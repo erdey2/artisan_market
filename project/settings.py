@@ -129,9 +129,9 @@ WSGI_APPLICATION = 'project.wsgi.application'
 DATABASE_URL = "postgresql://artisan_market_owner:npg_oRD8NkqOpH5P@ep-flat-pine-a8xnz3m8-pooler.eastus2.azure.neon.tech/artisan_market?sslmode=require"
 
 # Use dj_database_url to parse and configure the database settings
-""" DATABASES = {
+DATABASES = {
     'default': dj_database_url.config(default=DATABASE_URL)
-} """
+}
 
 """ DATABASES = {
     'default': {
@@ -144,7 +144,7 @@ DATABASE_URL = "postgresql://artisan_market_owner:npg_oRD8NkqOpH5P@ep-flat-pine-
     }
 } """
 
-DATABASES = {
+""" DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'artist_market_db',
@@ -153,7 +153,7 @@ DATABASES = {
         'HOST': 'localhost',
         'PORT': '5432',
     }
-}
+} """
 
 # WebSocket configuration
 ASGI_APPLICATION = "project.asgi.application"
@@ -162,11 +162,10 @@ ASGI_APPLICATION = "project.asgi.application"
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels.layers.InMemoryChannelLayer',
-        # Use Redis in production:
-        # 'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        # 'CONFIG': {
-        #     "hosts": [('redis', 6379)],
-        # },
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('redis', 6379)],
+        },
     },
 }
 
