@@ -6,7 +6,6 @@ from rest_framework import generics
 from orders.models import Order
 from .serializers import OrderSerializer
 
-
 class OrderView(models.Model):
     status = models.CharField(max_length=100)
 
