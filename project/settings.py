@@ -14,6 +14,7 @@ from datetime import timedelta
 from urllib.parse import urlparse
 import os
 
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -91,16 +92,15 @@ SPECTACULAR_SETTINGS = {
 }
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
-    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
-
 
 ROOT_URLCONF = 'project.urls'
 
@@ -126,11 +126,16 @@ WSGI_APPLICATION = 'project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-""" DATABASE_URL = "postgresql://artisan_market_owner:npg_oRD8NkqOpH5P@ep-flat-pine-a8xnz3m8-pooler.eastus2.azure.neon.tech/artisan_market?sslmode=require"
-parsed_url = urlparse(DATABASE_URL)
+DATABASE_URL = "postgresql://artisan_market_owner:npg_oRD8NkqOpH5P@ep-flat-pine-a8xnz3m8-pooler.eastus2.azure.neon.tech/artisan_market?sslmode=require"
+
+# Use dj_database_url to parse and configure the database settings
 DATABASES = {
-    'default': dj_database_url.config(default=os.getenv('DATABASE_URL')),
-} """
+    'default': dj_database_url.config(default=DATABASE_URL)
+}
+
+
+
+
 
 """ DATABASES = {
     'default': {
@@ -143,7 +148,8 @@ DATABASES = {
     }
 } """
 
-DATABASES = {
+
+""" DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'artist_market_db',
@@ -152,7 +158,7 @@ DATABASES = {
         'HOST': 'localhost',
         'PORT': '5432',
     }
-}
+} """
 
 # WebSocket configuration
 ASGI_APPLICATION = "project.asgi.application"
@@ -213,8 +219,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 # CORS Settings
+CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
+    "http://127.0.0.1:3000"
 ]
 
 # customized user
